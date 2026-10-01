@@ -1,20 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { PostController } from './post.controller';
 import { PostService } from './post.service';
-
 describe('PostController', () => {
-  let controller: PostController;
-
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+  it('resolves its explicit service dependency', async () => {
+    const module = await Test.createTestingModule({
       controllers: [PostController],
-      providers: [PostService],
+      providers: [{ provide: PostService, useValue: {} }],
     }).compile();
-
-    controller = module.get<PostController>(PostController);
-  });
-
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+    expect(module.get(PostController)).toBeDefined();
   });
 });

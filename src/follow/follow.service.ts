@@ -1,4 +1,4 @@
-import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
+import { Injectable, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -74,7 +74,9 @@ export class FollowService {
     return this.prisma.follow.findMany({
       where: { followerId: userId },
       include: {
-        following: true,
+        following: {
+          select: { id: true, name: true, bio: true, profileImage: true },
+        },
       },
     });
   }
@@ -84,7 +86,9 @@ export class FollowService {
     return this.prisma.follow.findMany({
       where: { followingId: userId },
       include: {
-        follower: true,
+        follower: {
+          select: { id: true, name: true, bio: true, profileImage: true },
+        },
       },
     });
   }

@@ -9,5 +9,6 @@ export class UpdateProfileDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(2048)
   profileImage?: string; // Base64やURLを想定
 }

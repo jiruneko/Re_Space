@@ -11,7 +11,7 @@ import {
 import { UserService } from './user.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UpdateBioDto } from './dto/update-bio.dto';
-import { UpdateProfileDto } from 'user/dto/update-profile.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import { AuthRequest } from '../types/auth-request';
 
 @Controller('users')

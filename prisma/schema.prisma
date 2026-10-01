@@ -14,6 +14,13 @@ model User {
   password String
   bio            String?
   profileImage    String?
+  role String @default("USER")
+  banned Boolean @default(false)
+  externalSubject String? @unique
+  profile Profile?
+  sessions Session[]
+  messages Message[]
+  reports Report[]
   posts    Post[]
   comments Comment[]
   Like     Like[]
@@ -91,4 +98,47 @@ model Like {
   post   Post @relation(fields: [postId], references: [id])
 
   @@unique([userId, postId])
+}
+
+model Profile {
+  userId Int @id
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  displayName String
+  avatar String @default("mint")
+  status String @default("")
+}
+model Session {
+  id String @id @default(uuid())
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  @@index([userId])
+}
+model Room {
+  id String @id
+  name String
+  description String
+  theme String @default("lobby")
+  capacity Int @default(30)
+  active Boolean @default(true)
+  messages Message[]
+}
+model Message {
+  id String @id @default(uuid())
+  roomId String
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  text String
+  createdAt DateTime @default(now())
+  @@index([roomId, createdAt])
+}
+model Report {
+  id Int @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targetId Int
+  reason String
+  resolved Boolean @default(false)
+  createdAt DateTime @default(now())
 }

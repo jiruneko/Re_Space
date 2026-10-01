@@ -1,0 +1,26 @@
+{
+  "scope": "local isolated server; not an internet/host capacity guarantee",
+  "users": 50,
+  "requestedMoveHzPerUser": 20,
+  "durationSeconds": 60.05,
+  "moveAttempts": 60397,
+  "successfulMoves": 60397,
+  "achievedMoveHzPerUser": 20.12,
+  "failures": 0,
+  "moveAckMs": {
+    "p50": 1,
+    "p95": 3,
+    "p99": 7
+  },
+  "chatAckMs": {
+    "samples": 600,
+    "p95": 24
+  },
+  "rosterEventsReceived": 0,
+  "movementFramesReceived": 30000,
+  "estimatedMovementMB": 70.27,
+  "estimatedRosterMB": 0,
+  "serverPeakRssMB": null,
+  "roomTransitions": 100,
+  "reconnections": 10
+}
