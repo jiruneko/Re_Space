@@ -24,7 +24,7 @@ export class CommentService {
     const comment = await this.prisma.comment.create({
       data: {
         content: dto.content,
-        postId: dto.postId,
+        postId: post.id,
         userId: userId,
       },
     });
@@ -52,16 +52,16 @@ export class CommentService {
   }
 
   async findByPostId(postId: number) {
-  return this.prisma.comment.findMany({
-    where: { postId },
-    include: {
-      user: {
-        select: { id: true, name: true }, // ← 必要に応じてemailなども
+    return this.prisma.comment.findMany({
+      where: { postId },
+      include: {
+        user: {
+          select: { id: true, name: true }, // ← 必要に応じてemailなども
+        },
       },
-    },
-    orderBy: { createdAt: 'asc' },
-  });
-}
+      orderBy: { createdAt: 'asc' },
+    });
+  }
 
   async updateComment(id: number, content: string, userId: number) {
     const existing = await this.prisma.comment.findUnique({ where: { id } });
@@ -75,16 +75,16 @@ export class CommentService {
   }
 
   async getCommentsByPost(postId: number) {
-  return this.prisma.comment.findMany({
-    where: { postId },
-    include: {
-      user: {
-        select: { name: true },
+    return this.prisma.comment.findMany({
+      where: { postId },
+      include: {
+        user: {
+          select: { name: true },
+        },
       },
-    },
-    orderBy: { createdAt: 'asc' },
-  });
-}
+      orderBy: { createdAt: 'asc' },
+    });
+  }
 
   async deleteComment(id: number, userId: number) {
     const existing = await this.prisma.comment.findUnique({ where: { id } });

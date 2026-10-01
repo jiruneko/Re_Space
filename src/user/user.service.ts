@@ -36,16 +36,21 @@ export class UserService {
     return this.prisma.user.update({
       where: { id: userId },
       data: { bio: dto.bio },
+      select: { id: true, name: true, bio: true, profileImage: true },
     });
   }
 
-  async updateProfile(userId: number, dto: { bio?: string; profileImage?: string }) {
-  return this.prisma.user.update({
-    where: { id: userId },
-    data: {
-      bio: dto.bio,
-      profileImage: dto.profileImage,
-    },
-  });
-}
+  async updateProfile(
+    userId: number,
+    dto: { bio?: string; profileImage?: string },
+  ) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      select: { id: true, name: true, bio: true, profileImage: true },
+      data: {
+        bio: dto.bio,
+        profileImage: dto.profileImage,
+      },
+    });
+  }
 }

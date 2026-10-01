@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: respace
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    numInstances: 1
+    disk:
+      name: respace-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: file:/data/respace.db
+      - key: JWT_SECRET
+        generateValue: true
+      - key: APP_ORIGIN
+        sync: false
+      - key: TRUST_PROXY
+        value: '1'

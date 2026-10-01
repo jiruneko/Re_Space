@@ -12,12 +12,22 @@
     "baseUrl": "./src",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "jsx": "preserve",
-    "typeRoots": ["./node_modules/@types", "./src/types"]
-  }
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "esModuleInterop": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "client",
+    "vite.config.ts",
+    "playwright.config.ts",
+    "test/browser"
+  ],
+  "include": ["src/**/*.ts"]
 }

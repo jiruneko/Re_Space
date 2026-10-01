@@ -68,7 +68,7 @@ export class PostService {
   }
 
   // ホームフィード取得（全ユーザー投稿を表示 ※テスト用）
-  async findHomeFeed(userId: number) {
+  async findHomeFeed(_userId: number) {
     const posts = await this.prisma.post.findMany({
       orderBy: { createdAt: 'desc' },
       include: {
@@ -143,10 +143,10 @@ export class PostService {
       throw new ForbiddenException('投稿の削除権限がありません');
     }
 
-    await this.prisma.like.deleteMany({ where: { postId: id } });
-
-    return this.prisma.post.delete({
-      where: { id },
+    return this.prisma.$transaction(async (db) => {
+      await db.like.deleteMany({ where: { postId: id } });
+      await db.comment.deleteMany({ where: { postId: id } });
+      return db.post.delete({ where: { id } });
     });
   }
 }

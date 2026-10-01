@@ -1,19 +1,27 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { ForbiddenException } from '@nestjs/common';
+import { PostService } from './post.service';
 import { PrismaService } from '../prisma/prisma.service';
-
-@Injectable()
-export class PostService {
-  constructor(private prisma: PrismaService) {}
-
-  // 他のメソッド...
-
-  async delete(id: number, userId: number) {
-    const post = await this.prisma.post.findUnique({ where: { id } });
-    if (!post || post.authorId !== userId) {
-      throw new ForbiddenException('削除権限がありません');
-    }
-
-    await this.prisma.post.delete({ where: { id } });
-    return { message: '削除されました' };
-  }
-}
+describe('PostService authorization', () => {
+  it('rejects deleting another user content', async () => {
+    const remove = jest.fn();
+    const module = await Test.createTestingModule({
+      providers: [
+        PostService,
+        {
+          provide: PrismaService,
+          useValue: {
+            post: {
+              findUnique: jest.fn().mockResolvedValue({ id: 1, authorId: 2 }),
+              delete: remove,
+            },
+          },
+        },
+      ],
+    }).compile();
+    await expect(module.get(PostService).remove(1, 3)).rejects.toBeInstanceOf(
+      ForbiddenException,
+    );
+    expect(remove).not.toHaveBeenCalled();
+  });
+});

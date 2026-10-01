@@ -1,18 +1,27 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
+import { ForbiddenException } from '@nestjs/common';
 import { CommentService } from './comment.service';
-
-describe('CommentService', () => {
-  let service: CommentService;
-
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [CommentService],
+import { PrismaService } from '../prisma/prisma.service';
+describe('CommentService authorization', () => {
+  it('rejects deleting another user content', async () => {
+    const remove = jest.fn();
+    const module = await Test.createTestingModule({
+      providers: [
+        CommentService,
+        {
+          provide: PrismaService,
+          useValue: {
+            comment: {
+              findUnique: jest.fn().mockResolvedValue({ id: 1, userId: 2 }),
+              delete: remove,
+            },
+          },
+        },
+      ],
     }).compile();
-
-    service = module.get<CommentService>(CommentService);
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+    await expect(
+      module.get(CommentService).deleteComment(1, 3),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+    expect(remove).not.toHaveBeenCalled();
   });
 });
