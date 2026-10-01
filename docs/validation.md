@@ -6,7 +6,10 @@
 
 **本番未デプロイ・公開URL未発行。** 本番DBでのmigration、インターネット越しの公開URL E2E、本番サーバーでの50接続負荷確認は未実施。
 
-Renderプラグインはインストール済みを確認したが、この作業会話にRenderのサービス管理操作が公開されていない。GitHub連携installation 155581131の対象はcompanyのみで、Re_Spaceへの書き込み権限はない。ローカルコミットのみでPR未作成。課金サービスは作成していない。
+GitHub連携のRe_Space権限を確認し、PR #1を作成済み。
+https://github.com/jiruneko/Re_Space/pull/1
+コミット15522a10fe5c11de50f87f098aa4fec6f1aebbd4のGitHub Actions run 36820011850は全ステップ成功。4ブラウザE2Eは4 passed（1.5分）。
+Renderブラウザ操作とStarter＋1GB永続ディスク（月額約US$7.25）の作成はユーザー承認済み。RenderへのGitHubサインインはスマートフォンの2段階認証待ちで、まだサービスを作成していない。
 
 ## 実施結果
 
@@ -22,9 +25,9 @@ Renderプラグインはインストール済みを確認したが、この作�
 | HTTPS / WSS | 本番モード＋ローカルTLS reverse proxyで2セッション成功。Secure/HttpOnly/SameSite=Lax確認。実証明書・Render外部通信は未確認 |
 | Chromium | 2つの独立コンテキストで登録、操作、チャット、プロフィール、ルーム移動、再読み込み、ログアウト・再ログイン、通報、退会、ネットワーク断・復帰成功 |
 | モバイル | Chromiumで390×844表示、方向ボタン、横はみ出しなしを確認 |
-| Firefox | ダウンロード成功。ページ生成前に環境のuid_map EPERMでプロセス停止。アプリ動作は未検証 |
-| WebKit / iPhone 13 | ダウンロード成功。GTK4/GStreamer等のシステム依存不足。install-depsは環境権限制約により失敗。アプリ動作は未検証 |
-| GitHub Actions | PRごとに4ブラウザプロジェクトを含むCIを設定。remoteに未反映のためCI自体は未実行 |
+| Firefox | ローカル環境制約を回避できるGitHub Actions上でE2E成功 |
+| WebKit / iPhone 13 | GitHub Actions上で両プロジェクトのE2E成功（実機Safariではなくエンジン・端末エミュレーション） |
+| GitHub Actions | PR #1で全ステップ成功。追加修正コミットごとにもCIを再実行 |
 
 ChromiumはChrome同系エンジンの代替検証。WebKitも実機Safariそのものではない。未実行のブラウザを合格扱いしない。
 
@@ -51,8 +54,8 @@ ChromiumはChrome同系エンジンの代替検証。WebKitも実機Safariその
 
 ## 公開までの残作業
 
-1. GitHub連携にRe_Spaceを追加し、実装コミットをpushしてCIを実行。
-2. Renderサービス管理接続を利用可能にし、有料プラン・永続ディスクの料金を承認した上でBlueprint適用。
+1. PRの最終コミットのCI結果を確認しマージ。
+2. RenderへのGitHubログインの2段階認証を完了し、承認済みBlueprintを適用。
 3. 正確なAPP_ORIGINと永続ディスクを確認し、デプロイ・health・管理者設定。
 4. 公開URLでE2Eと実ホストの負荷測定。Firefox/WebKit/iPhone相当のCI結果も確認。
 5. 運営者・問い合わせ先・利用規約/プライバシー案内、バックアップと復元運用を設定。

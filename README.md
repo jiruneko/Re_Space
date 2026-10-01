@@ -161,3 +161,12 @@ TEST_BASE_URL=https://your-service.onrender.com npm run test:browser
 - SQLiteは単一ディスク・単一インスタンス専用。ローリングで複数プロセスを並行稼働させず、更新時の短時間の再接続を許容します。
 
 CIは各PRでinstall、build、typecheck、lint、単体・統合・再migration・障害・HTTPS/WSS・50接続負荷・4ブラウザプロジェクトを実行します。CIが未実行または赤の状態で本番検証済みとは判断しないでください。
+
+
+公開ホストへの50ユーザー負荷試験（運営者が承認した対象のみ）:
+
+```bash
+TEST_BASE_URL=https://your-service.onrender.com LOAD_SECONDS=60 node test/public-load.cjs
+```
+
+50個の独立アカウントを通常の登録APIで作成し、WSSで20Hz移動・チャット・入退室・再接続を測定、最後に作成したアカウントのみ退会します。テスト中はロビー50席を使用するため、第三者へ案内する前または保守時間に実行してください。失敗した退会の資格情報はローカルの無視対象 `test-results/*-cleanup.json` にのみ残します。ファイルを公開せず、残ったテストアカウントの退会後に削除してください。登録/ログインの60回/15分/IP制限は維持し、セッション確認・ログアウト・退会には通常のAPI制限を適用します。

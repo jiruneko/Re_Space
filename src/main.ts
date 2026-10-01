@@ -105,7 +105,7 @@ async function bootstrap() {
     next();
   });
   app.use(
-    '/auth',
+    ['/auth/register', '/auth/login'],
     rateLimit({
       windowMs: 15 * 60000,
       limit: 60,
